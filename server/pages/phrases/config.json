@@ -1,0 +1,6 @@
+{
+    "routes": {
+        "GET /phrases/:show/": { "handler": "index" },
+        "GET /phrases/": { "handler": "index" }
+    }
+}

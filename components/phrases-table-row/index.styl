@@ -1,0 +1,69 @@
+.phrases-table-row,
+.phrases-table-row_header
+    $phraseWidth = 200px
+    $stateWidth = 80px
+    $clickWidth = 120px
+    $ctrWidth = 80px
+    $priceWidth = 90px
+
+    $leftMaxWidth = 420px
+    $leftMinWidth = 200px
+
+    $rightWidth =  $stateWidth + $clickWidth + $ctrWidth + $priceWidth + 60px
+    $rowMinWidth = $leftMinWidth +  $rightWidth + 20px + 40px + 2px
+
+    kind: shrink
+    min-width: $rowMinWidth
+    max-width: 1000px
+    border: 1px solid #e7e7e7
+    border-top: 0
+    background: #fff
+    padding: 0 20px
+
+    &__left,
+    &__right
+        padding: 18px 0
+
+    &__left
+        kind: shrink
+        min-width: $phraseWidth
+        max-width: $leftMaxWidth
+
+
+    &__state,
+    &__click,
+    &__ctr,
+    &__price
+        kind block inline
+        text-align: right
+        margin-right: 20px
+
+    &__right
+        kind: shrink-right
+        width: $rightWidth
+        text-align: right
+
+    &__state
+        width: $stateWidth
+
+    &__click
+        width: $clickWidth
+
+    &__ctr
+        width: $ctrWidth
+
+    &__price
+        width: $priceWidth
+        margin-right: 0
+
+    &__phrase
+        padding-left: 1.5em
+
+    &__checkbox
+        float: left
+        margin-right: -1.5em
+
+.phrases-table-row_header
+    background: transparent
+    border-right: 0
+
