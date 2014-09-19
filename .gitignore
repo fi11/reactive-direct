@@ -3,7 +3,7 @@ npm-debug.log
 .DS_Store
 .idea
 
-public
-!pubic/static/loader.js
+public/static/*
+!public/static/loader.js
 
 server/static-bundle.json
