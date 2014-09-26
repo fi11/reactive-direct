@@ -21,7 +21,7 @@ module.exports = {
         ]
     },
     stylus: {
-        use: [require('./lib/stylus-plugin.js')()]
+        use: [require('./lib/stylus-plugin.js')(), require('autoprefixer-stylus')()]
     },
     plugins: [
         new CommonsChunkPlugin('commons', '[chunkhash].js'),

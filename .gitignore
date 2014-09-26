@@ -4,6 +4,5 @@ npm-debug.log
 .idea
 
 public/static/*
-!public/static/loader.js
 
 server/static-bundle.json

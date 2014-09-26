@@ -1,0 +1,5 @@
+{
+    "routes": {
+        "GET /api/phrases/": { "handler": "index" }
+    }
+}

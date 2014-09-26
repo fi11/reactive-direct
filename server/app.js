@@ -2,6 +2,7 @@ var koa = require('koa');
 var debug = require('debug')('info');
 var app = koa();
 var mountPages = require('koa-mount-dir')('pages');
+var mountApi = require('koa-mount-dir')('api');
 var path = require('path');
 var send = require('koa-send');
 var errorView = require('./views/error');
@@ -35,18 +36,54 @@ if (process.env.NODE_ENV == 'development') {
 var React = require('react');
 var Page = require('../components/page');
 
-app.render = function(entrypoin, ctx) {
-    ctx = ctx || {};
+//app.render = function(entrypoin, ctx) {
+//    ctx = ctx || {};
+//
+//    try {
+//        var html = React.renderComponentToStaticMarkup(
+//            Page({ staticBundles: staticBundles, entrypoint: entrypoin, context: ctx }));
+//    } catch (err) {
+//        console.log('RENDER ERROR:', err);
+//    }
+//
+//    return html;
+//};
 
-    try {
-        var html = React.renderComponentToStaticMarkup(
-            Page({ staticBundles: staticBundles, entrypoint: entrypoin, context: ctx }));
-    } catch (err) {
-        console.log('RENDER ERROR:', err);
-    }
+app.use(function *(next) {
+    var self = this;
+    this.renderPage = function(entrypoin, ctx) {
+        ctx = ctx || {};
 
-    return html;
-};
+        var result = '';
+
+        var bundles = ['commons', entrypoin].map(function(name, idx) {
+            var bundle = { js: { path: '/static/' + staticBundles[name] } };
+            var splitedFilename = staticBundles[name].split('.');
+
+            bundle.js.version = splitedFilename[0];
+            bundle.js.key = name + '.' + splitedFilename[1];
+
+            return bundle;
+        }, this);
+
+
+
+        if (self.header.accept === 'application/json') {
+            result = { data: ctx,  bundle: bundles[1], entrypoin: entrypoin };
+        } else {
+            try {
+                result = React.renderComponentToStaticMarkup(
+                    Page({ bundles: bundles, entrypoint: entrypoin, context: ctx }));
+            } catch (err) {
+                console.log('RENDER ERROR:', err);
+            }
+        }
+
+        self.body = result;
+    };
+
+    yield next;
+});
 
 var phJsonPath = path.resolve(path.join(__dirname, 'ph.json'));
 
@@ -57,6 +94,7 @@ app.use(function *(next) {
 
 app.use(errorView);
 mountPages(app);
+mountApi(app);
 
 app.on('error', function(err, ctx) {
     var context = { request: ctx.method + ' ' + ctx.url, header: ctx.header };

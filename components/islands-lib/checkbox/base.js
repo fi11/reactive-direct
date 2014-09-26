@@ -10,6 +10,10 @@ module.exports = {
         };
     },
 
+    componentWillReceiveProps: function(props) {
+        this.setState({ checked: props.checked });
+    },
+
     _getCheckbox: function() {
         return (
             dom.div(
@@ -25,7 +29,9 @@ module.exports = {
     },
 
     _onClick: function() {
-        this.setState({ checked: !this.state.checked });
-        this.props.onClick &&  this.props.onClick(this.state.checked);
+        var newVal = !this.state.checked;
+        this.setState({ checked: newVal });
+
+        this.props.onClick &&  this.props.onClick(newVal);
     }
 };
