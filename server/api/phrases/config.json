@@ -1,5 +1,6 @@
 {
     "routes": {
-        "GET /api/phrases/": { "handler": "index" }
+        "GET /api/phrases/": { "handler": "index" },
+        "POST /api/phrases/": { "handler": "save" }
     }
 }

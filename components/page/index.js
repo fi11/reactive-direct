@@ -4,7 +4,7 @@ var toString = React.renderComponentToStaticMarkup;
 
 var fs = require('fs');
 var path = require('path');
-var loader = fs.readFileSync(path.resolve(path.join('lib', 'require-static.js'))).toString();
+var loader = fs.readFileSync(path.resolve(path.join('lib', 'bucket.min.js'))).toString();
 //var reader = require('fs').readFileSync;
 //var path = require('path');
 
@@ -22,11 +22,18 @@ module.exports = React.createClass({
 
         var sharedData = "window._sharedData = JSON.parse('" + JSON.stringify(context) + "');";
 
-        var scripts = this.props.bundles.map(function(bundle, idx) {
-            return  dom.script({
+        var preparedBundles = [];
+
+        this.props.bundles.forEach(function(bundle) {
+            bundle.js && preparedBundles.push(bundle.js);
+            bundle.css && preparedBundles.push(bundle.css);
+        });
+
+        var scripts = preparedBundles.map(function(bundle, idx) {
+            return dom.script({
                 dangerouslySetInnerHTML: {
-                    __html: "requireBundle('" +
-                        bundle.js.path + "', { key: '" + bundle.js.key + "', version: '" + bundle.js.version + "'});"
+                    __html: "bucket.require('" +
+                        bundle.path + "', { key: '" + bundle.key + "', version: '" + bundle.version + "'});"
                 },
                 key: idx
             });

@@ -9,6 +9,14 @@ module.exports = {
         phraseStore.setPrice(id, price);
     },
 
+    changePhrase: function(id, val) {
+        phraseStore.setPhrase(id, val);
+    },
+
+    changePhraseDescr: function(id, val) {
+        phraseStore.setPhraseDescr(id, val);
+    },
+
     check: function(id, val) {
         phraseStore.check(id, val);
     },
@@ -29,6 +37,12 @@ module.exports = {
     setState: function(val) {
         this.startUpdate();
         setTimeout(function() { phraseStore.setStateForActive(val) }, 0);
+    },
+
+    saveAllPhrases: function() {
+        phraseStore.getAll();
+
+        request({ method: 'post', url: '/api/phrases/', json: true, data: phraseStore.getAll() })
     }
 
 };

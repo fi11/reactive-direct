@@ -36,32 +36,25 @@ if (process.env.NODE_ENV == 'development') {
 var React = require('react');
 var Page = require('../components/page');
 
-//app.render = function(entrypoin, ctx) {
-//    ctx = ctx || {};
-//
-//    try {
-//        var html = React.renderComponentToStaticMarkup(
-//            Page({ staticBundles: staticBundles, entrypoint: entrypoin, context: ctx }));
-//    } catch (err) {
-//        console.log('RENDER ERROR:', err);
-//    }
-//
-//    return html;
-//};
-
 app.use(function *(next) {
     var self = this;
+
     this.renderPage = function(entrypoin, ctx) {
         ctx = ctx || {};
 
         var result = '';
 
-        var bundles = ['commons', entrypoin].map(function(name, idx) {
-            var bundle = { js: { path: '/static/' + staticBundles[name] } };
-            var splitedFilename = staticBundles[name].split('.');
+        var bundles = ['commons', entrypoin].map(function(name) {
+            var files = staticBundles[name];
+            var splitedJs = (files[0] || '').split('.');
+            var splitedCss = (files[1] || '').split('.');
+            var bundle = {};
 
-            bundle.js.version = splitedFilename[0];
-            bundle.js.key = name + '.' + splitedFilename[1];
+            if (files[0])
+                bundle.js = { path: '/static/' + files[0], version: splitedJs[0], key: name + '.' + splitedJs[1] };
+
+            if (files[1])
+                bundle.css ={ path: '/static/' + files[1], version: splitedCss[0], key: name + '.' + splitedCss[1] };
 
             return bundle;
         }, this);

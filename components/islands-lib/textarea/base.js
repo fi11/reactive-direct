@@ -9,11 +9,10 @@ module.exports = {
         };
     },
 
-    _getInput: function() {
-        return dom.input({
-            className: 'input' + bevis.view(this._view) + (this.props.small ? '-small' : ''),
+    _getTextarea: function() {
+        return dom.textarea({
+            className: 'textarea' + bevis.view(this._view) + (this.props.small ? '-small' : ''),
             value: this.state.value,
-            type: this.props.type,
             onChange: this._onChange
         });
     },

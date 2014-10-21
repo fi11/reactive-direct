@@ -12,9 +12,31 @@ module.exports = {
         chan.emit('change');
     },
 
+    setPhrase: function(id, val) {
+        if (!Store[id]) Store[id] = {};
+
+        Store[id].phrase =  val;
+        chan.emit('change');
+    },
+
+    setPhraseDescr: function(id, val) {
+        if (!Store[id]) Store[id] = {};
+
+        Store[id].descr =  val;
+        chan.emit('change');
+    },
+
+    getDescr: function(id) {
+        return Store[id] && Store[id].descr || '...';
+    },
+
     getAll: function() {
         return Object.keys(Store).map(function(id) {
-            return Store[id];
+            var data = Store[id];
+
+            data.id = id;
+
+            return data;
         });
     },
 

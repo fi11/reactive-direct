@@ -21,7 +21,7 @@ module.exports = {
                 var bundle = body.bundle.js;
 
                 if (!err) {
-                    window.requireBundle(
+                    bucket.require(
                         bundle.path,
                         { key: bundle.key, async: true, version: bundle.version },
                         function() {

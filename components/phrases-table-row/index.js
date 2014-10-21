@@ -7,6 +7,9 @@ var Input = require('../islands-lib/input/islands');
 var db = require('just-debounce');
 var phrasesActions = require('../../app/actions/phrases');
 
+var EditPhrase = require('../phrase-edit-popup/simple.js');
+var SpecEditPhrase = require('../phrase-edit-popup/spec.js');
+
 requireStatic('./index.styl');
 
 module.exports = React.createClass({
@@ -14,7 +17,13 @@ module.exports = React.createClass({
     getInitialState: function() {
         var phrase = this.props.phrase || {};
 
-        return { checked: !!this.props.checked, price: phrase.price, state: phrase.state };
+        return {
+            checked: !!this.props.checked,
+            price: phrase.price,
+            phrase: phrase.phrase,
+            state: phrase.state,
+            showEditPopup: false
+        };
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -26,10 +35,13 @@ module.exports = React.createClass({
         var isDirty = false;
         var nextPhrase = nextProps.phrase;
 
+
         if (this.props.isHeader) {
             if (this.state.checked !== nextProps.checked) isDirty = true;
         } else {
             if (this.state.checked !== nextProps.checked) isDirty = true;
+            else if (this.state.showEditPopup !== nextState.showEditPopup) isDirty = true;
+            else if (this.state.phrase !== nextState.phrase) isDirty = true;
             else if (this.state.price !== nextPhrase.price) isDirty = true;
             else if (this.state.state !== nextPhrase.state) isDirty = true;
         }
@@ -37,15 +49,12 @@ module.exports = React.createClass({
         return isDirty;
     },
 
-    componentDidMount: function() {
-        //console.log(this.getDOMNode().offsetHeight);
-    },
-
     render: function() {
         var isHeader = !!this.props.isHeader;
         var data = isHeader ?
             { phrase: 'Фразаы', state: 'Статус', click: 'Клики', ctr: 'CTR%' } :
             this.props.phrase;
+        var isSpec = data.type === 'spec';
 
         return (
             dom.div({ className: 'phrases-table-row' + bevis.view(isHeader && 'header') },
@@ -62,12 +71,27 @@ module.exports = React.createClass({
                     dom.div({ className: 'phrases-table-row__checkbox'},
                         Checkbox({ checked: this.state.checked, onClick: this._onCheck })
                     ),
-                    dom.div({ className: 'phrases-table-row__phrase'}, data.phrase)
+                    dom.div({ className: 'phrases-table-row__phrase' +(isSpec ? '-spec' : ''), onClick: this._onPhraseClick }, data.phrase),
+                    this.state.showEditPopup && this._getEditPopup(isSpec)
                 )
             )
         );
     },
-    
+
+    _getEditPopup: function(isSpec) {
+        return isSpec ?
+            SpecEditPhrase({
+                onClose: this._onEditClose,
+                phraseId: this.props.phrase.id,
+                phrase: this.state.phrase
+            }) :
+            EditPhrase({
+                onClose: this._onEditClose,
+                phraseId: this.props.phrase.id,
+                phrase: this.state.phrase
+            });
+    },
+
     _onPriceChange: db(function(val) {
         phrasesActions.changePrice(this.props.phrase.id, val);
     }, 100),
@@ -76,5 +100,13 @@ module.exports = React.createClass({
         this.props.isHeader ?
             phrasesActions.checkAll(val) :
             phrasesActions.check(this.props.phrase.id, val);
+    },
+    
+    _onPhraseClick: function() {
+        this.setState({ showEditPopup: true });
+    },
+
+    _onEditClose: function() {
+        this.setState({ showEditPopup: false });
     }
 });

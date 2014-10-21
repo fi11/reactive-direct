@@ -12,7 +12,7 @@
     $rightWidth =  $stateWidth + $clickWidth + $ctrWidth + $priceWidth + 60px
     $rowMinWidth = $leftMinWidth +  $rightWidth + 20px + 40px + 2px
 
-    kind: shrink
+    overflow: auto
     min-width: $rowMinWidth
     max-width: 1000px
     border: 1px solid #e7e7e7
@@ -20,15 +20,16 @@
     background: #fff
     padding: 0 20px
 
+
     &__left,
     &__right
         padding: 18px 0
 
     &__left
-        kind: shrink
+        overflow: auto;
+
         min-width: $phraseWidth
         max-width: $leftMaxWidth
-
 
     &__state,
     &__click,
@@ -39,7 +40,7 @@
         margin-right: 20px
 
     &__right
-        kind: shrink-right
+        float: right;
         width: $rightWidth
         text-align: right
 
@@ -56,8 +57,13 @@
         width: $priceWidth
         margin-right: 0
 
-    &__phrase
+    &__phrase, &__phrase-spec
         padding-left: 1.5em
+        text-decoration: underline
+        cursor: pointer
+
+    &__phrase-spec
+        color: darkred
 
     &__checkbox
         float: left

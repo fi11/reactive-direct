@@ -15,13 +15,18 @@ module.exports = React.createClass({
             dom.div({ className: 'phrases-footer' },
                 Button({ text: 'Вкл.', onClick: this._phraseOn }),
                 Button({ text: 'Выкл.', onClick: this._phraseOff }),
-                Button({ text: 'Загрузить все', onClick: this._loadAllPhrases })
+                Button({ text: 'Загрузить все', onClick: this._loadAllPhrases }),
+                Button({ text: 'Сохранить', onClick: this._saveAllPhrases })
             )
         );
     },
 
     _loadAllPhrases: function() {
         routesAction.loadAllPhrases();
+    },
+
+    _saveAllPhrases: function() {
+        phrasesAction.saveAllPhrases();
     },
 
     _phraseOn: function() {
