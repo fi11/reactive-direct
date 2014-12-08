@@ -1,32 +1,33 @@
 var React = require('react');
 var dom = React.DOM;
 var Header = require('../islands-lib/header/islands.js');
-
 var routesAction = require('../../app/actions/routes');
+var bevis = require('bevis')();
 
-requireStatic('./index.styl');
+require('./index.styl');
 
 module.exports = React.createClass({
     displayName: 'App',
-    componentDidMount: function() {
-        window.onpopstate = function() {
-            routesAction.loadPage(location.href);
-        };
 
+    componentDidMount: function() {
+        window.React = React;
+        window.onpopstate = function() {
+            routesAction.loadPage(location.href, true);
+        };
     },
-    render: function(ctx) {
-        ctx = ctx || {};
+
+    _onArrawClick: function() {
+        routesAction.loadMorda();
+    },
+    render: function() {
+        var block = bevis.block('app');
 
         return (
-            //dom.div({ className: 'main', id: 'main', onScroll: this.onScroll },
-            dom.div({ className: 'main', id: 'main' },
-                Header({ actions: this.props.headerActions }),
+            dom.div({ className: block.name() },
+                Header({ actions: this.props.headerActions, onArrawClick: this._onArrawClick }),
                 this.props.children,
                 dom.div({ className: 'footer' })
             )
         );
-    },
-    onScroll: function(e) {
-        console.log(this.getDOMNode().scrollTop);
     }
 });

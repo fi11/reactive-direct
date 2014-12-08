@@ -3,12 +3,15 @@ var dom = React.DOM;
 
 
 var Base = require('./base.js');
-requireStatic('./islands.styl');
+require('./islands.styl');
 
 module.exports = React.createClass({
     displayName: 'Islands popup',
+
     mixins: [Base],
-    _view: 'islands',
+
+    viewName: 'islands',
+
     render: function() {
         return this._getPopup();
     }

@@ -5,20 +5,21 @@ set-skin-namespace('islands')
     kind: block
     skin: tabs
 
-    .tabs__item
-        /*reset('li');*/
+    &__item
+        reset('li');
         kind: block inline
 
-    .tabs__text
+    &__text
         skin: tabs-item
         kind: block
 
-    .tabs__item._selected
+    &__item._selected
         skin: tabs-item_selected
 
-        .tabs__text
-            color: #000
-            cursor: default
+        .tabs_islands
+            &__text
+                color: #000
+                cursor: default
 
 
 

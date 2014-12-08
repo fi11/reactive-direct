@@ -11,6 +11,5 @@ exports.index = function *() {
     var model = new PhrasesModel(this);
     var phrases = yield model.getIndex(isAll ? 3000 : 15);
 
-
     this.renderPage('phrases', { phrases: phrases });
 };

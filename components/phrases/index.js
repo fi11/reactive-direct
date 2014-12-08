@@ -1,4 +1,3 @@
-
 var React = require('react');
 var dom = React.DOM;
 var App = require('../app');
@@ -6,31 +5,25 @@ var Nav = require('../nav-bar');
 var PhrasesTable = require('../phrases-table');
 var PhrasesFooter = require('../phrases-footer');
 var phrasesStore = require('../../app/stores/phrases');
-
 var appStore = require('../../app/stores/app');
-
 var Loading = require('../loading');
+var InitMixin = require('react-serve/mixins/init');
 
-requireStatic('./index.styl');
+require('./index.styl');
 
-var Phrases = module.exports = React.createClass({
+module.exports = React.createClass({
     displayName: 'Phrases',
+    mixins: [InitMixin],
     getInitialState: function() {
+        console.log('Phrases Component Init');
         return {
-            phrases: this.props.context.phrases,
-            isAllChecked: false
+            phrases: phrasesStore.getAll(),
+            isAllChecked: phrasesStore.isAllChecked()
         };
     },
 
-    componentDidMount: function() {
-        appStore.addInitListener(this._onInitData, this);
-    },
-
-    componentWillUnmount: function() {
-        appStore.removeInitListener();
-    },
-    
     componentWillReceiveProps: function() {
+        console.log('Phrases Component Will Receive Props');
         this.setState({ phrases: phrasesStore.getAll(), isAllChecked: phrasesStore.isAllChecked() });
     },
 
@@ -45,17 +38,10 @@ var Phrases = module.exports = React.createClass({
         );
     },
 
-    _onInitData: function() {
-        Phrases.init(appStore.getInitData());
-    },
-
     statics: {
-        init: function(context) {
-            phrasesStore.init(context.phrases);
-
-            if (context.title) document.title = context.title;
-
-            React.renderComponent(Phrases({ context: context }), document.body);
+        storesWillMount: function(data) {
+            console.log('Phrases Store Will Mount');
+            phrasesStore.init(data.phrases);
         }
     }
 });

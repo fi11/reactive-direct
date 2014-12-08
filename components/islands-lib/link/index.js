@@ -1,12 +1,15 @@
 var React = require('react');
 var dom = React.DOM;
+var bevis  = require('bevis')();
 
-requireStatic('./index.styl');
+require('./index.styl');
 
 module.exports = React.createClass({
     displayName: 'Link',
     render: function() {
-        var attrs = { className: 'link' };
+        var block = bevis('link', this.viewName);
+
+        var attrs = { className: block.name() };
         var props = this.props;
 
         Object.keys(props).forEach(function(key) {

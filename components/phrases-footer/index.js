@@ -22,7 +22,8 @@ module.exports = React.createClass({
     },
 
     _loadAllPhrases: function() {
-        routesAction.loadAllPhrases();
+        //routesAction.loadAllPhrases();
+        phrasesAction.loadAll();
     },
 
     _saveAllPhrases: function() {

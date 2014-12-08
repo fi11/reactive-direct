@@ -1,11 +1,11 @@
 var React = require('react');
 var dom = React.DOM;
-var bevis  = require('../../lib/bevis');
+var bevis  = require('bevis')();
 
 var Spinner = require('../islands-lib/spinner/islands.js');
 var appStore = require('../../app/stores/app');
 
-requireStatic('./index.styl');
+require('./index.styl');
 
 module.exports = React.createClass({
     displayName: 'Loading',
@@ -15,12 +15,14 @@ module.exports = React.createClass({
     componentWillMount: function() {
         appStore.addChangeListener(this._onPageStateChange, this);
     },
-    componentWillUMount: function() {
+    componentWillUnmount: function() {
         appStore.removeChangeListener(this._onPageStateChange);
     },
     render: function() {
+        var block = bevis.block('loading');
+
         return (
-            dom.div({ className: 'loading' + bevis.state('show', this.state.show) },
+            dom.div({ className: block.name(this.state.show ? 'show' : '') },
                 Spinner()
             )
         );

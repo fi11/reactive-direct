@@ -1,6 +1,7 @@
 var Store = {};
 var EventEmitter = require('eventemitter3');
 var merge = require('react/lib/merge');
+var request = require('../../lib/request');
 
 var chan = new EventEmitter();
 
@@ -55,12 +56,14 @@ module.exports = {
     },
 
     init: function(data) {
+        console.time('Phrase init');
         var phrases = {};
 
         (data || []).forEach(function(item) {
             phrases[item.id] = this.prepareEntry(item);
         }, this);
 
+        console.timeEnd('Phrase init');
         Store = phrases;
     },
 
@@ -83,8 +86,16 @@ module.exports = {
     },
 
     update: function(data) {
+        console.time('Phrase update');
+        //
+        //(data || []).forEach(function(item) {
+        //    Store[item.id] = this.prepareEntry(item);
+        //}, this);
+
         this.init(data);
-        
+
+        console.timeEnd('Phrase update');
+
         chan.emit('change');
     },
 

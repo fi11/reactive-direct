@@ -1,6 +1,6 @@
 var React = require('react');
 var dom = React.DOM;
-var bevis  = require('../../../lib/bevis');
+var bevis  = require('bevis')();
 var listen = require('react/lib/EventListener').listen;
 
 module.exports = {
@@ -24,12 +24,12 @@ module.exports = {
         this.props.onClose && this.props.onClose();
     },
 
-    _blockName: 'popup',
+    blockName: 'popup',
 
     _getPopup: function(content) {
-        var block = bevis.block(this.props.blockName || 'popup', this._view);
+        var block = bevis.block(this.props.blockName || 'popup', this.viewName);
 
-        return dom.div({ className: block.name },
+        return dom.div({ className: block.name() },
             dom.div({ className: block.elem('content') },
                 content || this.props.children
             )

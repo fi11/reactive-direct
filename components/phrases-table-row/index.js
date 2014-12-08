@@ -1,6 +1,7 @@
 var React = require('react');
 var dom = React.DOM;
-var bevis = require('../../lib/bevis');
+var bevis = require('bevis')();
+
 var Checkbox = require('../islands-lib/checkbox/islands');
 var Input = require('../islands-lib/input/islands');
 
@@ -10,7 +11,8 @@ var phrasesActions = require('../../app/actions/phrases');
 var EditPhrase = require('../phrase-edit-popup/simple.js');
 var SpecEditPhrase = require('../phrase-edit-popup/spec.js');
 
-requireStatic('./index.styl');
+
+require('./index.styl');
 
 module.exports = React.createClass({
     displayName: 'Phrases table row',
@@ -54,24 +56,26 @@ module.exports = React.createClass({
         var data = isHeader ?
             { phrase: 'Фразаы', state: 'Статус', click: 'Клики', ctr: 'CTR%' } :
             this.props.phrase;
+
         var isSpec = data.type === 'spec';
+        var block = bevis.block('phrases-table-row', isHeader ? 'header' : '');
 
         return (
-            dom.div({ className: 'phrases-table-row' + bevis.view(isHeader && 'header') },
-                dom.div({ className: 'phrases-table-row__right' },
-                    dom.div({ className: 'phrases-table-row__state' }, data.state),
-                    dom.div({ className: 'phrases-table-row__click' }, data.click),
-                    dom.div({ className: 'phrases-table-row__ctr' }, data.ctr),
-                    dom.div({ className: 'phrases-table-row__price' },
+            dom.div({ className: block.name() },
+                dom.div({ className: block.elem('right') },
+                    dom.div({ className: block.elem('state') }, data.state),
+                    dom.div({ className: block.elem('click') }, data.click),
+                    dom.div({ className: block.elem('ctr') }, data.ctr),
+                    dom.div({ className: block.elem('price') },
                         isHeader ? 'Цена клика' : Input(
                             { value: this.state.price, small: true, onChange: this._onPriceChange })
                     )
                 ),
-                dom.div({ className: 'phrases-table-row__left' },
-                    dom.div({ className: 'phrases-table-row__checkbox'},
+                dom.div({ className: block.elem('left') },
+                    dom.div({ className: block.elem('checkbox') },
                         Checkbox({ checked: this.state.checked, onClick: this._onCheck })
                     ),
-                    dom.div({ className: 'phrases-table-row__phrase' +(isSpec ? '-spec' : ''), onClick: this._onPhraseClick }, data.phrase),
+                    dom.div({ className: block.elem('phrase' + (isSpec ? '-spec' : '')), onClick: this._onPhraseClick }, data.phrase),
                     this.state.showEditPopup && this._getEditPopup(isSpec)
                 )
             )
@@ -90,11 +94,14 @@ module.exports = React.createClass({
                 phraseId: this.props.phrase.id,
                 phrase: this.state.phrase
             });
+
+
+
     },
 
-    _onPriceChange: db(function(val) {
+    _onPriceChange: function(val) {
         phrasesActions.changePrice(this.props.phrase.id, val);
-    }, 100),
+    },
 
     _onCheck: function(val) {
         this.props.isHeader ?

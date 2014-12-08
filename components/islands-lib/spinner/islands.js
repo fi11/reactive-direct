@@ -1,7 +1,7 @@
 var React = require('react');
 var dom = React.DOM;
 
-requireStatic('./islands.styl');
+require('./islands.styl');
 
 module.exports = React.createClass({
     displayName: 'Islands spinner',

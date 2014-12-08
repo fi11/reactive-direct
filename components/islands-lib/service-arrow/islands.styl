@@ -5,41 +5,40 @@
     vertical-align: inherit
     margin-right: 10px;
 
-    .service-arrow
-        &__name
-            display: inline-block
-            font-family: Arial,Helvetica,sans-serif
-            font-size: 17px
-            line-height: 18px
-            padding: 5px 9px 5px 11px
-            color: #000
-            text-decoration: none
-            outline: none
+    &__name
+        display: inline-block
+        font-family: Arial,Helvetica,sans-serif
+        font-size: 17px
+        line-height: 18px
+        padding: 5px 9px 5px 11px
+        color: #000
+        text-decoration: none
+        outline: none
 
-        &__content
-            kind: block inline
+    &__content
+        kind: block inline
 
-        &__arrow
-            &:before, &:after
-                position: absolute
-                left: -1px
-                width: 100%
-                background: #fff
-                border-right: 2px solid #ffdb4d
-                content: ' '
-                box-sizing: border-box
+    &__arrow
+        &:before, &:after
+            position: absolute
+            left: -1px
+            width: 100%
+            background: #fff
+            border-right: 2px solid #ffdb4d
+            content: ' '
+            box-sizing: border-box
 
-            &:before
-                border-top: 2px solid #ffdb4d
-                transform: skew(30deg,0deg)
-                transform-origin: 0 0
-                height: 50%
-                top: 0
+        &:before
+            border-top: 2px solid #ffdb4d
+            transform: skew(30deg,0deg)
+            transform-origin: 0 0
+            height: 50%
+            top: 0
 
-            &:after
-                border-bottom: 2px solid #ffdb4d
-                transform: skew(-30deg,0deg)
-                transform-origin: 0 100%
-                height: 50%
-                bottom: 0
+        &:after
+            border-bottom: 2px solid #ffdb4d
+            transform: skew(-30deg,0deg)
+            transform-origin: 0 100%
+            height: 50%
+            bottom: 0
 

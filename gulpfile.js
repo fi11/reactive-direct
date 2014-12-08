@@ -9,20 +9,6 @@ var env = {
 gulp.task('webpack', shell.task('./node_modules/webpack/bin/webpack.js --progress'));
 gulp.task('ww', shell.task('./node_modules/webpack/bin/webpack.js --watch'));
 
-
-//gulp.task('watch-static', ['webpack'], function() {
-//    gulp.watch(
-//        [
-//            'components',
-//            'components/*/*',
-//            'components/*/*/*',
-//            'app',
-//            'app/*/*'
-//        ],
-//        ['webpack']);
-//});
-
-//gulp.task('watch', ['watch-static'],function () {
 gulp.task('watch-server', ['webpack'],function () {
   nodemon({
       script: 'server/worker.js',

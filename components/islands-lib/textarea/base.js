@@ -1,6 +1,6 @@
 var React = require('react');
 var dom = React.DOM;
-var bevis  = require('../../../lib/bevis');
+var bevis  = require('bevis')();
 
 module.exports = {
     getInitialState: function() {
@@ -10,8 +10,10 @@ module.exports = {
     },
 
     _getTextarea: function() {
+        var block = bevis.block('textarea', this.viewName);
+
         return dom.textarea({
-            className: 'textarea' + bevis.view(this._view) + (this.props.small ? '-small' : ''),
+            className: block.name() + (this.props.small ? '-small' : ''),
             value: this.state.value,
             onChange: this._onChange
         });

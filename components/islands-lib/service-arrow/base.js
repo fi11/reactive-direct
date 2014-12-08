@@ -1,15 +1,21 @@
 var React = require('react');
 var dom = React.DOM;
-var bevis = require('../../../lib/bevis');
+var bevis  = require('bevis')();
 
 module.exports = {
     displayName: 'Service arrow',
     _getArrow: function() {
+        var block = bevis.block('service-arrow', this.viewName);
+
         return (
-            dom.div({ className: 'service-arrow' + bevis.view(this._view)  },
-                dom.div({ className: 'service-arrow__arrow' }),
-                dom.div({ className: 'service-arrow__content' },
-                    !!this.props.name && dom.a({ className: 'service-arrow__name', href: '/' }, this.props.name),
+            dom.div({ className: block.name()  },
+                dom.div({ className: block.elem('arrow') }),
+                dom.div({ className: block.elem('content') },
+                    !!this.props.name && dom.a(
+                        {
+                            className: block.elem('name'), onClick: this.props.onClick
+                        },
+                        this.props.name),
                     this.props.children
                 )
             )

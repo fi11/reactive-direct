@@ -7,6 +7,8 @@ $ npm install
 
 ## Run
 
+You must have node 0.11.9 or higher for generator support
+
 ```
 $ gulp
 ```

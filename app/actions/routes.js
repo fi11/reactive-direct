@@ -11,23 +11,31 @@ module.exports = {
         this.loadPage('/phrases/');
     },
 
-    loadPage: function(url) {
-        appActions.startUpdate();
+    loadMorda: function() {
+        this.loadPage('/');
+    },
 
+    loadPage: function(url, onpopstate) {
+        appActions.startUpdate();
+        console.log('Load page ...');
         request(
             { method: 'get', url: url, acceptJson: true },
             function(err, res) {
+                console.log('Load page:', url, res.status);
+
                 var body = res.body;
-                var bundle = body.bundle.js;
 
                 if (!err) {
-                    bucket.require(
-                        bundle.path,
-                        { key: bundle.key, async: true, version: bundle.version },
-                        function() {
-                            appStore.setNewInitData(body.data);
-                            history.pushState(body.title || document.title, null, url);
+                    window._sharedData = body.data;
+                    onpopstate || history.pushState(body.title || document.title, null, url);
+
+                    [].concat(body.bundles || []).forEach(function(item, idx) {
+                        console.log('Require bucket', item.params.key, item.path, idx);
+
+                        bucket.require(item.path, item.params, function() {
+                            console.log('Bucket required', item.params.key, item.path, idx);
                         });
+                    });
                 } else {
                     console.log(err);
                 }
@@ -35,5 +43,4 @@ module.exports = {
                 appActions.endUpdate();
             });
     }
-
 };

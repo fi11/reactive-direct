@@ -1,6 +1,6 @@
 var React = require('react');
 var dom = React.DOM;
-var bevis  = require('../../../lib/bevis');
+var bevis  = require('bevis')();
 
 module.exports = {
     displayName: 'Checkbox',
@@ -15,15 +15,16 @@ module.exports = {
     },
 
     _getCheckbox: function() {
+        var block = bevis.block('checkbox', this.viewName);
+
         return (
             dom.div(
                 {
-                    className: 'checkbox' + bevis.view(this._view) + bevis.state('checked', this.state.checked),
+                    className: block.name(this.state.checked ? 'checked': ''),
                     onClick: this._onClick
                 },
-                dom.input({ className: 'checkbox__control', type: 'checkbox' }),
-               // dom.div({ className: 'checkbox__box' }),
-                dom.div({ className: 'checkbox__tip' })
+                dom.input({ className: block.elem('control'), type: 'checkbox' }),
+                dom.div({ className: block.elem('tip') })
             )
         )
     },

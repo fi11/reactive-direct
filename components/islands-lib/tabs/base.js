@@ -1,6 +1,6 @@
 var React = require('react');
 var dom = React.DOM;
-var bevis  = require('../../../lib/bevis');
+var bevis  = require('bevis')();
 
 module.exports = {
     displayName: 'Tabs',
@@ -11,20 +11,22 @@ module.exports = {
     },
 
     _getTabs: function() {
+        var block = bevis.block('tabs', this.viewName);
+
         var current = this.state.current;
         var tabs = (this.props.tabs || []).map(function(item, idx) {
             var isCurrent = item.name && item.name === current;
 
             return dom.li(
                 {
-                    className: 'tabs__item' +  bevis.state('selected', isCurrent),
+                    className: block.elem('item', isCurrent ? 'selected' : ''),
                     onClick: this._onSelect.bind(this, item.name),
                     key: idx
                 },
-                dom.div({ className: 'tabs__text' }, item.text))
+                dom.div({ className: block.elem('text') }, item.text))
         }, this);
 
-        return dom.ul({ className: 'tabs' + bevis.view(this._view)  }, tabs);
+        return dom.ul({ className: block.name()  }, tabs);
     },
 
     render: function() {

@@ -1,6 +1,6 @@
 var React = require('react');
 var dom = React.DOM;
-var bevis  = require('../../../lib/bevis');
+var bevis  = require('bevis')();
 
 module.exports = {
     displayName: 'Button',
@@ -11,13 +11,15 @@ module.exports = {
     },
 
     _getButton: function() {
+        var block = bevis.block('button', this.viewName);
+
         return (
             dom.button(
                 {
-                    className: 'button' + bevis.view(this._view),
+                    className: block.name(),
                     onClick: this._onClick
                 },
-                dom.span({ className: 'button__text' }, this.props.text)
+                dom.span({ className: block.elem('text') }, this.props.text)
             )
         );
     },

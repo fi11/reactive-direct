@@ -2,14 +2,15 @@ var React = require('react');
 var dom = React.DOM;
 var App = require('../app');
 
+var InitMixin = require('react-serve/mixins/init');
+
 module.exports = React.createClass({
     displayName: 'Morda',
-
-    render: function(ctx) {
-        ctx = ctx || {};
+    mixins: [InitMixin],
+    render: function() {
         return (
             App({},
-                dom.img({ src: requireStatic('./morda.png') })
+                dom.img({ src: require('./morda.png') })
             )
         );
     }

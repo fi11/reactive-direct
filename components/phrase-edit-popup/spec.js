@@ -7,7 +7,7 @@ var Base = require('./base.js');
 var Input = require('../islands-lib/input/islands');
 var Text = require('../islands-lib/textarea/islands');
 
-requireStatic('./index.styl');
+require('./index.styl');
 
 module.exports = React.createClass({
     displayName: 'Edit phrase',

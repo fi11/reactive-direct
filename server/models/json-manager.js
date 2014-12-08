@@ -17,6 +17,7 @@ function JsonBaseManager(name, ctx) {
 
 module.exports = Manager.create(JsonBaseManager, {
     getData: function *() {
+        console.time('Read json data');
         var data = yield this._read();
 
         try {
@@ -25,6 +26,7 @@ module.exports = Manager.create(JsonBaseManager, {
             new Error('Bad phrase data');
         }
 
+        console.timeEnd('Read json data');
         return data;
     },
 
