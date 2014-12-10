@@ -30,7 +30,12 @@ module.exports = [
         plugins: [
             new wp.optimize.CommonsChunkPlugin(COMMON_FILE_NAME, '[chunkhash].js'),
             new ExtractTextPlugin('[chunkhash].css'),
-            reactServe.webpackPlugin('/static/')
+            reactServe.webpackPlugin('/static/'),
+            new wp.DefinePlugin({
+                'process.env': {
+                    NODE_ENV: JSON.stringify('development')
+                }
+            })
         ]
     },
     {

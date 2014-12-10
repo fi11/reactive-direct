@@ -42,6 +42,7 @@ module.exports = React.createClass({
         storesWillMount: function(data) {
             console.log('Phrases Store Will Mount');
             phrasesStore.init(data.phrases);
+            appStore.init(data.phrases);
         }
     }
 });

@@ -1,44 +1,50 @@
 var phraseStore = require('../stores/phrases');
-var appStore = require('../stores/app');
-var appActions = require('../actions/app');
-
-var Phrases = require('../../components/phrases');
-
 var request = require('../../lib/request');
+var PhrasesActionInterface = require('../../lib/fluxr').actionInterface;
 
-module.exports = {
+var CONST = require('../const/actions');
+
+module.exports = new PhrasesActionInterface({
+    displayName: 'PhrasesAction',
+
     changePrice: function(id, price) {
-        phraseStore.setPrice(id, price);
+        this.dispatch(CONST.PHRASES.CHANGE_PRICE, { id: id, price: price });
     },
 
     changePhrase: function(id, val) {
-        phraseStore.setPhrase(id, val);
+        this.dispatch(CONST.PHRASES.CHANGE_PHRASE, { id: id, val: val });
     },
 
     changePhraseDescr: function(id, val) {
-        phraseStore.setPhraseDescr(id, val);
+        this.dispatch(CONST.PHRASES.CHANGE_DESCR, { id: id, val: val });
+
     },
 
     check: function(id, val) {
-        phraseStore.check(id, val);
+        this.dispatch(CONST.PHRASES.CHECK, { id: id, val: val });
     },
 
     checkAll: function(val) {
         this.startUpdate();
-        setTimeout(function() { phraseStore.checkAll(val); }, 0);
+
+        setTimeout(function() {
+            this.dispatch(CONST.PHRASES.CHECK_ALL, { val: val });
+        }.bind(this), 0);
     },
 
     startUpdate: function() {
-        appStore.setLoading(true);
+        this.dispatch(CONST.APP.CHANGE_LOADING_STATUS, { val: true });
     },
 
     endUpdate: function() {
-        appStore.setLoading(false);
+        this.dispatch(CONST.APP.CHANGE_LOADING_STATUS, { val: false });
     },
 
     setState: function(val) {
         this.startUpdate();
-        setTimeout(function() { phraseStore.setStateForActive(val); }, 0);
+        setTimeout(function() {
+            this.dispatch(CONST.PHRASES.CHANGE_PHRASE_STATE, { val: val });
+        }, 0);
     },
 
     saveAllPhrases: function() {
@@ -48,7 +54,9 @@ module.exports = {
     },
 
     loadAll: function() {
-        appActions.startUpdate();
+        var self = this;
+
+        this.startUpdate();
 
         history.pushState(null, null, '/phrases/all/');
 
@@ -58,13 +66,15 @@ module.exports = {
                 var body = res.body;
 
                 if (!err) {
-                    phraseStore.update(body.phrases);
+                    self.dispatch(CONST.PHRASES.UPDATE_STORE, { data: body.phrases });
+
+                    //hraseStore.update(body.phrases);
                 } else {
                     console.log(err);
                 }
 
-                appActions.endUpdate();
+                self.endUpdate();
             });
     }
 
-};
+});

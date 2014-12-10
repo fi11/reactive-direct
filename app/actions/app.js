@@ -1,14 +1,14 @@
-var appStore = require('../stores/app');
-var request = require('../../lib/request');
+var CONST = require('../const/actions');
+var AppActionInterface = require('../../lib/fluxr').actionInterface;
 
+module.exports = new AppActionInterface({
+    displayName: 'AppAction',
 
-module.exports = {
     startUpdate: function() {
-        appStore.setLoading(true);
-        appStore.setLoading(true);
+        this.dispatch(CONST.APP.CHANGE_LOADING_STATUS, { val: true });
     },
 
     endUpdate: function() {
-        appStore.setLoading(false);
+        this.dispatch(CONST.APP.CHANGE_LOADING_STATUS, { val: false });
     }
-};
+});

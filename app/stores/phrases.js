@@ -1,30 +1,64 @@
 var Store = {};
-var EventEmitter = require('eventemitter3');
-var merge = require('react/lib/merge');
-var request = require('../../lib/request');
 
-var chan = new EventEmitter();
+var PhrasesStoreInterface = require('../../lib/fluxr').StoreInterface;
+var CONST = require('../const/actions');
 
-module.exports = {
+module.exports = new PhrasesStoreInterface({
+    displayName: 'PhrasesStore',
+
+    addListeners: function(add) {
+        add(CONST.PHRASES.CHANGE_PRICE, function(payload) {
+            this.setPrice(payload.id, payload.price);
+        });
+
+        add(CONST.PHRASES.CHANGE_PHRASE, function(payload) {
+            this.setPhrase(payload.id, payload.val);
+        });
+
+        add(CONST.PHRASES.CHANGE_DESCR, function(payload) {
+            this.setPhraseDescr(payload.id, payload.val)
+        });
+
+        add(CONST.PHRASES.CHECK, function(payload) {
+            this.check(payload.id, payload.val);
+        });
+
+        add(CONST.PHRASES.CHECK_ALL, function(payload) {
+            this.checkAll(payload.val);
+        });
+
+        add(CONST.PHRASES.UPDATE_STORE, function(payload) {
+            this.update(payload.data);
+        });
+
+        add(CONST.PHRASES.INIT_STORE, function(payload) {
+            this.init(payload.data);
+        });
+
+        add(CONST.PHRASES.CHANGE_PHRASE_STATE, function(payload) {
+            this.setStateForActive(payload.val)
+        });
+    },
+
     setPrice: function(id, price) {
         if (!Store[id]) Store[id] = {};
 
         Store[id].price =  price;
-        chan.emit('change');
+        this.emitChange();
     },
 
     setPhrase: function(id, val) {
         if (!Store[id]) Store[id] = {};
 
         Store[id].phrase =  val;
-        chan.emit('change');
+        this.emitChange();
     },
 
     setPhraseDescr: function(id, val) {
         if (!Store[id]) Store[id] = {};
 
         Store[id].descr =  val;
-        chan.emit('change');
+        this.emitChange();
     },
 
     getDescr: function(id) {
@@ -43,8 +77,7 @@ module.exports = {
 
     check: function(id, val) {
         Store[id].checked = !!val;
-
-        chan.emit('change');
+        this.emitChange();
     },
 
     checkAll: function(val) {
@@ -52,7 +85,7 @@ module.exports = {
             Store[id].checked = !!val;
         });
 
-        chan.emit('change');
+        this.emitChange();
     },
 
     init: function(data) {
@@ -75,7 +108,7 @@ module.exports = {
             }
         }, this);
 
-        chan.emit('change');
+        this.emitChange();
     },
 
     isAllChecked: function() {
@@ -87,16 +120,12 @@ module.exports = {
 
     update: function(data) {
         console.time('Phrase update');
-        //
-        //(data || []).forEach(function(item) {
-        //    Store[item.id] = this.prepareEntry(item);
-        //}, this);
 
         this.init(data);
 
         console.timeEnd('Phrase update');
 
-        chan.emit('change');
+        this.emitChange();
     },
 
     prepareEntry: function(item) {
@@ -105,13 +134,5 @@ module.exports = {
         item.checked = !!(Store[item.id] || {}).checked;
 
         return item;
-    },
-
-    addChangeListener: function(fn, ctx) {
-        chan.on('change', fn, ctx || this);
-    },
-
-    removeChangeListener: function(fn) {
-        chan.off('change', fn);
     }
-};
+});

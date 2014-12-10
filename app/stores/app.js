@@ -1,45 +1,30 @@
-var Store = { loading: false  };
-var EventEmitter = require('eventemitter3');
+var Store = { loadingStatus: 0  };
 
-var chan = new EventEmitter();
+var StoreInterface = require('../../lib/fluxr').StoreInterface;
+var CONST = require('../const/actions');
 
-module.exports = {
+module.exports = new StoreInterface({
+    displayName: 'AppStore',
+
+    addListeners: function(add) {
+        add(CONST.APP.CHANGE_LOADING_STATUS, function(payload) {
+            this.setLoading(payload.val);
+        });
+    },
+
     setLoading: function(val) {
-        Store.loading = val;
-        chan.emit('change');
+        val ?
+            ++Store.loadingStatus :
+            Store.loadingStatus && --Store.loadingStatus;
+
+        this.emitChange();
     },
 
     isLoading: function() {
-        return Store.loading;
-    },
-
-    setEntrypoint: function(val) {
-        Store.entrypoint = val;
-        chan.emit('change');
-    },
-
-    setNewInitData: function(data) {
-        Store.initData = Object.create(data || {});
-        chan.emit('init');
+        return !!Store.loadingStatus;
     },
 
     getInitData: function() {
         return Store.initData;
-    },
-
-    addChangeListener: function(fn, ctx) {
-        chan.on('change', fn, ctx || this);
-    },
-
-    removeChangeListener: function(fn) {
-        chan.off('change', fn);
-    },
-
-    addInitListener: function(fn, ctx) {
-        chan.on('init', fn, ctx || this);
-    },
-
-    removeInitListener: function(fn) {
-        chan.off('init', fn);
     }
-};
+});
